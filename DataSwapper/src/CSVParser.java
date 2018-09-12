@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dataswapper;
+
 
 import java.util.ArrayList;
 import java.io.File;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Properties;
 
 /**
  *
@@ -23,16 +24,15 @@ public class CSVParser {
     private char fieldDelimiter;
     private char fieldQuote;
     
-    
-    //arraylist to store the email address 
-    private ArrayList<String> emailAddresses;
-    private String filePath;
-    private char fieldDelimiter;
-    private char fieldQuote;
-    
-    
-    
-    private ArrayList<String> parseFile(){}
+    public CSVParser(Properties prop){
+        
+        filePath = prop.getProperty("filePath");
+        fieldDelimiter=(prop.getProperty("fieldDelimiter")).charAt(0);
+        fieldQuote=(prop.getProperty("fieldDelimiter")).charAt(0);
+    }
+
+ 
+    private ArrayList<String> parseFile(){
     
     
         Scanner scanner = new Scanner(new File(csvFile));
@@ -42,15 +42,7 @@ public class CSVParser {
         }
         scanner.close();
 
-    }
-
-    public static List<String> parseLine(String cvsLine) {
-        return parseLine(cvsLine, DEFAULT_SEPARATOR, DEFAULT_QUOTE);
-    }
-
-    public static List<String> parseLine(String cvsLine, char separators) {
-        return parseLine(cvsLine, separators, DEFAULT_QUOTE);
-    }
+   
 
     public static List<String> parseLine(String cvsLine, char separators, char customQuote) {
 
