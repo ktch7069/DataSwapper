@@ -1,38 +1,37 @@
-package dataswapper;
-
-import java.util.*;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package dataswapper;
+
+import java.util.*;
 
 /**
  *
- * @author Trump-PC
+ * @author tchung
  */
 public class Engine {
- 
-    
-    private ArrayList<String> emailAddresses;
     
     public Engine(){
         
     }
     
-    
     public void run(){
         
-        /**
-         * Make an object of the CSV parser, read in email address into emilAddresses arraylist
-         * then use the template engine to sustitue the document id and also the email address 
-         */
+        Data data = new Data(1,100000);
+        data.setEmailAddress("ktch7069@gmail.com");
         
+        System.out.println(data.getEmailAddress());
     }
     
     
-    public void saveFile(){
+    public static void main(String[] args){
+        
+        Engine engine = new Engine();
+        
+        engine.run();
+        System.out.println("blah");
         
     }
-    
 }
