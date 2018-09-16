@@ -41,9 +41,9 @@ public class Engine {
     public void run(){
         
         //make a CSV Parser object
-        CSVParser parser = new CSVParser(prop);
-     
-        Data data = new Data(1,100000);
+        CSVParser parser = new CSVParser(prop); 
+      
+        
         data.setEmailAddress("ktch7069@gmail.com");
         
         System.out.println(data.getEmailAddress());

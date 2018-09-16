@@ -17,116 +17,123 @@ import java.util.Properties;
  */
 public class CSVParser {
    
+    private final String inputPathKey="inputPath";
+    private final String outputPathKey="outputPath";
+    private final String fieldDelimiterKey="fieldDelimiter";
+    private final String fieldQuoteKey="fieldQuote";
     
     //arraylist to store the email address 
     private ArrayList<String> emailAddresses;
-    private String filePath;
+    private String inputPath;
+    private String outputPath;
     private char fieldDelimiter;
     private char fieldQuote;
     
     public CSVParser(Properties prop){
         
-        filePath = prop.getProperty("filePath");
+        inputPath= prop.getProperty(inputPathKey);
+        outputPath =prop.getProperty(outputPathKey);
         fieldDelimiter=(prop.getProperty("fieldDelimiter")).charAt(0);
         fieldQuote=(prop.getProperty("fieldDelimiter")).charAt(0);
     }
 
- 
-    private ArrayList<String> parseFile(){
-    
-    
-        Scanner scanner = new Scanner(new File(csvFile));
+
+    public List<String> parseLine(String cvsLine, char separators, char customQuote) throws Exception{
+        
+        Scanner scanner = new Scanner(new File(inputPath));
+        
         while (scanner.hasNext()) {
-            List<String> line = parseLine(scanner.nextLine());
-            System.out.println("Country [id= " + line.get(0) + ", code= " + line.get(1) + " , name=" + line.get(2) + "]");
-        }
-        scanner.close();
+            
+            //Create a data object and put it to the arraylist
+            String emailAddr = scanner.nextLine();
+            //parsing the line
+        
+                    scanner.close();
 
-   
+                    List<String> result = new ArrayList<>();
 
-    public static List<String> parseLine(String cvsLine, char separators, char customQuote) {
+                    //if empty, return!
+                    if (cvsLine == null && cvsLine.isEmpty()) {
+                        return result;
+                    }
 
-        List<String> result = new ArrayList<>();
+                    if (customQuote == ' ') {
+                        customQuote = DEFAULT_QUOTE;
+                    }
 
-        //if empty, return!
-        if (cvsLine == null && cvsLine.isEmpty()) {
-            return result;
-        }
+                    if (separators == ' ') {
+                        separators = DEFAULT_SEPARATOR;
+                    }
 
-        if (customQuote == ' ') {
-            customQuote = DEFAULT_QUOTE;
-        }
+                    StringBuffer curVal = new StringBuffer();
+                    boolean inQuotes = false;
+                    boolean startCollectChar = false;
+                    boolean doubleQuotesInColumn = false;
 
-        if (separators == ' ') {
-            separators = DEFAULT_SEPARATOR;
-        }
+                    char[] chars = cvsLine.toCharArray();
 
-        StringBuffer curVal = new StringBuffer();
-        boolean inQuotes = false;
-        boolean startCollectChar = false;
-        boolean doubleQuotesInColumn = false;
+                    for (char ch : chars) {
 
-        char[] chars = cvsLine.toCharArray();
+                        if (inQuotes) {
+                            startCollectChar = true;
+                            if (ch == customQuote) {
+                                inQuotes = false;
+                                doubleQuotesInColumn = false;
+                            } else {
 
-        for (char ch : chars) {
+                                //Fixed : allow "" in custom quote enclosed
+                                if (ch == '\"') {
+                                    if (!doubleQuotesInColumn) {
+                                        curVal.append(ch);
+                                        doubleQuotesInColumn = true;
+                                    }
+                                } else {
+                                    curVal.append(ch);
+                                }
 
-            if (inQuotes) {
-                startCollectChar = true;
-                if (ch == customQuote) {
-                    inQuotes = false;
-                    doubleQuotesInColumn = false;
-                } else {
+                            }
+                        } else {
+                            if (ch == customQuote) {
 
-                    //Fixed : allow "" in custom quote enclosed
-                    if (ch == '\"') {
-                        if (!doubleQuotesInColumn) {
-                            curVal.append(ch);
-                            doubleQuotesInColumn = true;
+                                inQuotes = true;
+
+                                //Fixed : allow "" in empty quote enclosed
+                                if (chars[0] != '"' && customQuote == '\"') {
+                                    curVal.append('"');
+                                }
+
+                                //double quotes in column will hit this!
+                                if (startCollectChar) {
+                                    curVal.append('"');
+                                }
+
+                            } else if (ch == separators) {
+
+                                result.add(curVal.toString());
+
+                                curVal = new StringBuffer();
+                                startCollectChar = false;
+
+                            } else if (ch == '\r') {
+                                //ignore LF characters
+                                continue;
+                            } else if (ch == '\n') {
+                                //the end, break!
+                                break;
+                            } else {
+                                curVal.append(ch);
+                            }
                         }
-                    } else {
-                        curVal.append(ch);
+
                     }
-
-                }
-            } else {
-                if (ch == customQuote) {
-
-                    inQuotes = true;
-
-                    //Fixed : allow "" in empty quote enclosed
-                    if (chars[0] != '"' && customQuote == '\"') {
-                        curVal.append('"');
-                    }
-
-                    //double quotes in column will hit this!
-                    if (startCollectChar) {
-                        curVal.append('"');
-                    }
-
-                } else if (ch == separators) {
 
                     result.add(curVal.toString());
 
-                    curVal = new StringBuffer();
-                    startCollectChar = false;
-
-                } else if (ch == '\r') {
-                    //ignore LF characters
-                    continue;
-                } else if (ch == '\n') {
-                    //the end, break!
-                    break;
-                } else {
-                    curVal.append(ch);
-                }
-            }
-
-        }
-
-        result.add(curVal.toString());
-
-        return result;
+                    return result;
     }
+        
+        
+        // line is parsed then we create data object and put it in arraylist.
 
 }
 
