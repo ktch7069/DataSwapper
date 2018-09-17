@@ -19,6 +19,9 @@ public class Data {
     
     public Data(int maxDocId, int minDocId){
         
+        this.maxDocId=maxDocId;
+        this.minDocId=minDocId;
+        
         documentId = generateRandomDocId();
     }
             
