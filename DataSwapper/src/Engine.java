@@ -47,8 +47,14 @@ public class Engine {
         parser.parseLine();
         
         this.emailData= parser.getEmailData();
-        System.out.println(emailData.size());
-        System.out.println("Hi");
+        
+        for(Data dat:emailData){
+            System.out.println(dat.getDocumentId());
+            System.out.println(dat.getEmailAddress());
+            System.out.println("*********************");
+            
+        }
+       
         
      
         

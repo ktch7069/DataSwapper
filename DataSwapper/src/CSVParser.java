@@ -21,6 +21,7 @@ public class CSVParser {
     private final String fieldQuoteKey="fieldQuote";
     private final String minDocNumberKey="mixDocNumber";
     private final String maxDocNumberKey="maxDocNumber";
+    private final boolean debug =false;
     
     //arraylist to store the email address 
     private ArrayList<Data> emailData;
@@ -50,6 +51,11 @@ public class CSVParser {
             
             //Create a data object and put it to the arraylist
             String emailString = scanner.nextLine();
+            
+            if(debug == true){
+                System.out.print("Scanner input : ");
+                System.out.println(emailString);
+            }
              //if empty, return!
             if (emailString == null && emailString.isEmpty()) {
                 break;
@@ -62,7 +68,16 @@ public class CSVParser {
          
         char[] chars = emailString.toCharArray();
         
+        if(debug == true){
+                System.out.print("char array : ");
+                System.out.println(chars);
+            }
+        
         for (char ch : chars) {
+            if(debug == true){
+                System.out.print("The char is : ");
+                System.out.println(ch);
+            }
             if (inQuotes) {
                 
                 startCollectChar = true;
@@ -103,6 +118,13 @@ public class CSVParser {
                     else if (ch == fieldDelimiter) {
                         
                         Data aDat = new Data(maxDocIdNbr,minDocIdNbr); 
+                        
+                        if(debug == true){
+                            System.out.print("Putting String : ");
+                            System.out.print(curVal.toString());
+                            System.out.println(" to the arraylist!");
+                          }
+                        
                         aDat.setEmailAddress(curVal.toString());
                         emailData.add(aDat);
 
@@ -115,6 +137,9 @@ public class CSVParser {
                     } 
                     //end of the char array
                     else if (ch == '\n') {
+                         if(debug == true){
+                            System.out.print("Reaching the end stopping... ");
+                         }
                         //the end, break!
                         break;
                     } else {
@@ -123,6 +148,13 @@ public class CSVParser {
             }
 
         }
+        
+       //putting in the data just before EOF .... 
+       Data aDat = new Data(maxDocIdNbr,minDocIdNbr);
+       aDat.setEmailAddress(curVal.toString());
+       emailData.add(aDat);
+       curVal = new StringBuffer();
+     
     }
  
   }
