@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 import java.util.ArrayList;
-import java.io.File;
+import java.io.*;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Properties;
@@ -16,7 +16,7 @@ import java.util.Properties;
 public class CSVParser {
    
     private final String inputPathKey="inputPath";
-    private final String outputPathKey="outputPath";
+    private final String outputPathKey="outPutPath";
     private final String fieldDelimiterKey="fieldDelimiter";
     private final String fieldQuoteKey="fieldQuote";
     private final String minDocNumberKey="mixDocNumber";
@@ -39,9 +39,10 @@ public class CSVParser {
         fieldQuote=(prop.getProperty(fieldQuoteKey)).charAt(0);
         minDocIdNbr=Integer.parseInt(prop.getProperty(minDocNumberKey));
         maxDocIdNbr=Integer.parseInt(prop.getProperty(maxDocNumberKey));
+        emailData = new ArrayList<Data>();
     }
     
-    public void parseLine() throws Exception{
+    public void parseLine() throws IOException{
         
         Scanner scanner = new Scanner(new File(inputPath));
       

@@ -18,11 +18,13 @@ public class Engine {
     
     private Properties prop = new Properties();
     private InputStream input=null;
+    private ArrayList<Data> emailData;
+   
    
     public Engine(){
         //read property file
         try{
-            input = new FileInputStream("config.properties");
+            input = new FileInputStream("src/config.properties");
             prop.load(input);
         }catch(IOException ex){
             ex.printStackTrace();
@@ -38,15 +40,19 @@ public class Engine {
         }      
     }
     
-    public void run(){
+    public void run()throws IOException{
         
         //make a CSV Parser object
         CSVParser parser = new CSVParser(prop); 
-      
+        parser.parseLine();
         
-        data.setEmailAddress("ktch7069@gmail.com");
+        this.emailData= parser.getEmailData();
+        System.out.println(emailData.size());
+        System.out.println("Hi");
         
-        System.out.println(data.getEmailAddress());
+     
+        
+     
     }
     
     
@@ -54,7 +60,15 @@ public class Engine {
         
         Engine engine = new Engine();
         
-        engine.run();
+        try{
+            engine.run();
+            
+        }catch(IOException e){
+            System.out.println("Boom!");
+            System.exit(0);
+        }
+                
+            
         System.out.println("blah");
         
     }
